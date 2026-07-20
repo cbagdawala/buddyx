@@ -1,10 +1,19 @@
 # BuddyX (`buddyx`)
 
 A cross-harness **Agent Skill** that turns your AI coding assistant into **BuddyX**, a
-master orchestrator: it parses a `/buddyx` command, routes the task to the most suitable
-specialized sub-agent in your project, creates a new agent when none fits, coordinates
-multi-step work, and reports progress — distributed as an npm CLI that installs the skill
-into **Claude Code**, **opencode**, and other assistants.
+master orchestrator. Every command runs a disciplined loop — **plan → route → delegate →
+verify → report**: it maps your `/buddyx` request to an action, routes it to the
+best-matching specialized sub-agent in your project (invoked as a *real* sub-agent when the
+harness supports it), fans independent work out **in parallel**, gates the result through a
+**review/verify** step, and closes with a consistent report. It creates a new sub-agent —
+with a proper frontmatter contract and least-privilege tools — when none fits. Distributed
+as an npm CLI that installs the skill into **Claude Code**, **opencode**, and other
+assistants.
+
+> **v2** is a ground-up rebuild: real sub-agent delegation (not inline role-play),
+> parallel fan-out, verification gates, planning + `status`, a security posture, and a thin
+> `SKILL.md` router over an on-demand `references/` corpus. See
+> [What's inside](#whats-inside-the-skill).
 
 Install method mirrors [`ganesh-gyan-cli`](https://github.com/cbagdawala/ganesh-gyan): a
 small CLI (`buddyx`) copies the bundled skill into each assistant's skills folder.
@@ -41,15 +50,30 @@ trigger it automatically on matching orchestration requests.
 `claude` (Claude Code) · `opencode` · `cursor` · `windsurf` · `codex` · `gemini` ·
 `antigravity` — or `all`.
 
-Each install is self-contained: `SKILL.md` is copied into
-`<assistant-dir>/skills/buddyx/`.
+Each install is self-contained: `SKILL.md` plus the full `references/` corpus is copied
+into `<assistant-dir>/skills/buddyx/`.
 
 ## What BuddyX does
 
 BuddyX is an **orchestrator**, not a stack. It ships no sub-agents of its own — instead it
 **discovers the specialized agents already in your project** (`.claude/agents/`,
-`.opencode/agent/`, etc.), delegates to the best match, and creates a new agent when none
-fits.
+`.opencode/agent/`, etc.), routes to the best match on their `description`, and creates a
+new agent (to a frontmatter contract) when none fits.
+
+Every command runs the same loop:
+
+```
+PARSE → PLAN → ROUTE → DELEGATE → VERIFY → REPORT
+```
+
+- **Real delegation** — invokes matching sub-agents via the harness's Agent tool
+  (`subagent_type`); falls back to inline role-play only when the harness can't spawn them.
+- **Parallel fan-out** — independent subtasks run concurrently; dependent ones are sequenced.
+- **Verify gate** — non-trivial output is routed through a read-only reviewer/tester before
+  it's called done (adversarial multi-reviewer for risky changes).
+- **Planning + `status`** — multi-step work gets an explicit plan; `status` reads from it.
+- **Safety posture** — confirmation gates for destructive/outward-facing ops, least-privilege
+  tools on created agents, faithful reporting.
 
 ### Commands
 
@@ -69,6 +93,19 @@ fits.
 | `agent list` | List all available agents |
 | `status` | Check project status |
 | `help` | Show available commands |
+
+## What's inside the skill
+
+A thin `SKILL.md` router over an on-demand `references/` corpus (loaded only when the task
+needs it):
+
+- **delegation-protocol.md** — real sub-agent invocation, parallel vs sequential, recovery, degradation
+- **routing.md** — capability index, task→agent matching, tie-breaks, fallback ladder
+- **agent-spec.md** — the frontmatter contract, `agent create` procedure, quality bar
+- **report-format.md** — the standard result block
+- **safety.md** — confirmation gates, least-privilege, secrets, faithful reporting
+- **workflows/** — per-command playbooks (create · refactor · review · analyze · test · docs)
+- **checklists/done-criteria.md** — acceptance criteria that define "done"
 
 ## Update
 
