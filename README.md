@@ -45,6 +45,12 @@ Restart the assistant, then invoke it by typing `/buddyx` or just asking, e.g.
 *"buddyx create payment-gateway module"*. The skill's `description` also lets the model
 trigger it automatically on matching orchestration requests.
 
+**New project?** Run `/buddyx bootstrap` first — BuddyX scans your stack, proposes a
+tailored set of specialized sub-agents (backend, frontend, db, testing, reviewer…), and on
+your approval scaffolds them, so every later command has specialists to route to. (This is
+the in-assistant command; don't confuse it with the terminal `buddyx init`, which installs
+the skill.)
+
 ## Supported assistants
 
 `claude` (Claude Code) · `opencode` · `cursor` · `windsurf` · `codex` · `gemini` ·
@@ -83,6 +89,7 @@ PARSE → PLAN → ROUTE → DELEGATE → VERIFY → REPORT
 
 | Command | Description |
 |---|---|
+| `bootstrap` | Scan the project and scaffold a tailored agent fleet (propose → approve → generate) |
 | `create <target> <type>` | Create a module, component, or agent |
 | `analyze <target>` | Analyze code, structure, or requirements |
 | `refactor <target>` | Refactor existing code |
@@ -104,7 +111,7 @@ needs it):
 - **agent-spec.md** — the frontmatter contract, `agent create` procedure, quality bar
 - **report-format.md** — the standard result block
 - **safety.md** — confirmation gates, least-privilege, secrets, faithful reporting
-- **workflows/** — per-command playbooks (create · refactor · review · analyze · test · docs)
+- **workflows/** — per-command playbooks (bootstrap · create · refactor · review · analyze · test · docs)
 - **checklists/done-criteria.md** — acceptance criteria that define "done"
 
 ## Update

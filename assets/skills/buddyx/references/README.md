@@ -10,6 +10,7 @@ Loaded on demand by `SKILL.md`. Read only what the task needs.
 - `safety.md` — confirmation gates, least privilege, secrets, faithful reporting.
 
 ## Workflows (per command)
+- `workflows/bootstrap.md` — scan the project → propose → approve → scaffold an agent fleet.
 - `workflows/create-module.md` — plan → parallel fan-out → verify → checklist.
 - `workflows/refactor.md` — behavior-preserving change with a mandatory verify gate.
 - `workflows/review.md` — the verify gate + standalone review + adversarial verification.

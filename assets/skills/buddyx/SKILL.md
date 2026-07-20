@@ -41,6 +41,7 @@ them for `create`/`refactor` on non-trivial scope.
 
 | Command | Action | Read |
 |---|---|---|
+| `bootstrap` | Scan the project, propose & scaffold a tailored agent fleet | `references/workflows/bootstrap.md` |
 | `create <target> <type>` | Create module / component / feature | `references/workflows/create-module.md` |
 | `refactor <target>` | Refactor existing code | `references/workflows/refactor.md` |
 | `test <target>` | Create or run tests | `references/workflows/test.md` |
@@ -80,6 +81,10 @@ Check these in order; use the first directory that exists for the harness you're
 
 Build a lightweight capability index of these once per session (name + description from
 frontmatter) and route against it — see `references/routing.md`.
+
+**Fresh project with no agents yet?** Run `/buddyx bootstrap` — it scans the stack,
+proposes a tailored fleet, and (on approval) scaffolds the agents so later commands have
+specialists to route to. See `references/workflows/bootstrap.md`.
 
 ## Planning multi-step work
 
