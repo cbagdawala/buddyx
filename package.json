@@ -1,0 +1,51 @@
+{
+  "name": "buddyx",
+  "version": "1.0.0",
+  "description": "CLI to install the BuddyX skill — a master orchestrator that parses commands and delegates to specialized sub-agents — into AI coding assistants like Claude Code and opencode.",
+  "type": "module",
+  "bin": {
+    "buddyx": "bin/buddyx.mjs"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "assets"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node bin/buddyx.mjs",
+    "lint:skill": "node lib/lint-skill.mjs"
+  },
+  "keywords": [
+    "orchestrator",
+    "agent",
+    "agent-skill",
+    "sub-agents",
+    "delegation",
+    "claude",
+    "claude-code",
+    "opencode",
+    "cursor",
+    "ai",
+    "skill",
+    "buddyx"
+  ],
+  "author": "cbagdawala",
+  "license": "MIT",
+  "homepage": "https://github.com/cbagdawala/buddyx#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cbagdawala/buddyx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cbagdawala/buddyx/issues"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "ora": "^8.1.1",
+    "prompts": "^2.4.2"
+  }
+}
