@@ -78,6 +78,7 @@ Check these in order; use the first directory that exists for the harness you're
 - `.claude/agents/` (project) or `~/.claude/agents/` (global) — Claude Code
 - `.opencode/agent/` · `.cursor/agents/` · `.windsurf/agents/` · `.codex/agents/`
 - `.gemini/agents/` · `.agents/` (Antigravity)
+- `.factory/droids/` (project) or `~/.factory/droids/` (global) — Factory Droid
 
 Build a lightweight capability index of these once per session (name + description from
 frontmatter) and route against it — see `references/routing.md`.

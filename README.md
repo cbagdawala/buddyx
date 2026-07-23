@@ -30,6 +30,7 @@ Then add the skill to your assistant (run inside a project for project scope, or
 ```bash
 buddyx init --ai claude          # Claude Code   → .claude/skills/buddyx/
 buddyx init --ai opencode        # opencode      → .opencode/skills/buddyx/
+buddyx init --ai factory         # Factory Droid → .factory/skills/buddyx/
 buddyx init --ai claude --global # → ~/.claude/skills/buddyx/ (all projects)
 buddyx init --ai all             # every supported assistant
 buddyx init                      # auto-detect + interactive picker
@@ -54,7 +55,7 @@ the skill.)
 ## Supported assistants
 
 `claude` (Claude Code) · `opencode` · `cursor` · `windsurf` · `codex` · `gemini` ·
-`antigravity` — or `all`.
+`antigravity` · `factory` (Factory Droid) — or `all`.
 
 Each install is self-contained: `SKILL.md` plus the full `references/` corpus is copied
 into `<assistant-dir>/skills/buddyx/`.
