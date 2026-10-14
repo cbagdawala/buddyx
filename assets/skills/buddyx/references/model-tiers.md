@@ -4,18 +4,19 @@ Sub-agents that declare no model **inherit the session's model** — usually the
 capable (and most expensive) one. Most sub-agent work doesn't need it. BuddyX picks the
 **cheapest tier that can do the step well**, and escalates only when that tier falls short.
 
-## The three tiers
+## The tiers
 
 | Tier | Claude Code value | Use for |
 |---|---|---|
 | **light** | `haiku` | Mechanical, low-reasoning work: building the capability index / `agent list`, `status`, manifest & structure scans, file/symbol lookups, running an existing test suite and summarizing results, formatting/collating facts already gathered |
 | **standard** | `sonnet` | Routine building and judgment: backend/frontend/migration builders, writing tests, docs authoring, straightforward refactors, the default verify-gate reviewer |
 | **deep** | `opus` | Real reasoning: architecture & planning, cross-cutting or risky refactors, the security lens in adversarial review, debugging an unclear failure, ambiguous requirements |
+| **max** *(opt-in only)* | `fable` | The rare problem `opus` has already failed on — see below. Never a default |
 
 **BuddyX itself** (the orchestrator — parse, plan, route, join, report) stays on the
 session model. Don't spawn a sub-agent just to change BuddyX's own model.
 
-Use the **tier aliases** (`haiku`, `sonnet`, `opus`), not pinned model IDs — aliases track
+Use the **tier aliases** (`haiku`, `sonnet`, `opus`, `fable`), not pinned model IDs — aliases track
 the newest model in each tier, so agents never break on a retired ID.
 
 ## Task → tier defaults
@@ -41,8 +42,8 @@ the newest model in each tier, so agents never break on a retired ID.
 
 ## How the model is chosen (precedence, highest first)
 
-1. **User override** in the command — "use opus", "deep mode", "cheap mode"/"light mode"
-   applies to that command's sub-agents.
+1. **User override** in the command — "use opus", "deep mode", "cheap mode"/"light mode",
+   "use fable"/"max mode" applies to that command's sub-agents.
 2. **Per-call override** — BuddyX passes `model` on the Agent/Task tool call when a
    specific subtask needs a different tier than the agent's default (e.g.
    `backend-architect` normally runs `sonnet`, but gets `opus` to design a payment flow).
@@ -57,14 +58,30 @@ Start at the default tier. Escalate **one tier, once**, when:
 - the verify gate rejects its output for a reasoning error (not a typo-level nit), or
 - the work turns out bigger or more ambiguous than it looked when routed.
 
-light → standard → deep. Note the escalation in the report's **Agents used** line (`sonnet → opus`) so the user can
+light → standard → deep. Automatic escalation **stops at deep** — it never reaches max.
+Note the escalation in the report's **Agents used** line (`sonnet → opus`) so the user can
 raise the agent's default if it keeps happening. Never de-escalate a security review.
+
+## Max tier (`fable`) — opt-in only
+
+Fable is the most capable model and costs roughly **2.5× Opus** per token; single
+requests on hard tasks can also run for many minutes. It is **never** an agent's
+`model:` default and **never** reached by automatic escalation. Use it only when:
+
+- the user asks for it in the command ("use fable", "max mode"), or
+- `opus` has already failed on a hard design or debugging problem **and** the user approves
+  the switch — offer it in one line ("opus couldn't crack X; retry on fable?"), don't
+  switch on your own.
+
+Scope it to the one subtask that needs it, not the whole command. If the session itself
+runs on Fable, sub-agents still follow the normal tiers — that's where the saving comes
+from.
 
 ## Harness support
 
 | Harness | How to set the model |
 |---|---|
-| Claude Code | `model: haiku \| sonnet \| opus \| inherit` in frontmatter; `model` param on the Agent tool for per-call overrides |
+| Claude Code | `model: haiku \| sonnet \| opus \| inherit` in frontmatter (`fable` only as a per-call override); `model` param on the Agent tool for per-call overrides |
 | Factory Droid | `model:` in the droid frontmatter (`inherit` or a model id the account offers) |
 | opencode | `model: <provider>/<model-id>` in agent frontmatter — map tiers to the configured provider's small / mid / large models |
 | Others (Cursor, Windsurf, Codex, Gemini, Antigravity) | Omit `model:` unless the harness documents it; agents inherit |
@@ -75,6 +92,7 @@ mode tiers only guide *how much* effort to spend; say so in the report if it mat
 ## Anti-patterns
 
 - Every sub-agent on the top model "to be safe".
+- `model: fable` in an agent file, or escalating to Fable without the user asking.
 - A read-only lookup/scan agent on `opus`.
 - A security reviewer on `haiku`.
 - Re-running the same failing tier repeatedly instead of escalating once.

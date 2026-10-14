@@ -105,7 +105,8 @@ For any `create`/`refactor` (or multi-agent) command:
 - **Least privilege** — every sub-agent you create gets the minimum `tools:` it needs.
 - **Right-size the model** — run each step on the cheapest tier that does it well
   (`haiku` scans/lookups, `sonnet` building/reviewing, `opus` design/security/hard debugging);
-  escalate one tier on failure. Never leave sub-agents on the top model by default.
+  escalate one tier on failure (up to `opus`; `fable` only when the user opts in). Never
+  leave sub-agents on the top model by default.
   See `references/model-tiers.md`.
 - **Verify before "done"** — route non-trivial output through a review/test gate.
 - **Report consistently** — always close with the standard result block.

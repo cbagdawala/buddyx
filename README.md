@@ -82,6 +82,7 @@ PARSE → PLAN → ROUTE → DELEGATE → VERIFY → REPORT
 - **Model tiering** — each step runs on the cheapest model tier that can do it well
   (`haiku` for scans/lookups/test runs, `sonnet` for building and reviewing, `opus` for
   architecture, security review and hard debugging), escalating one tier only on failure.
+  `fable` is opt-in only ("use fable" / "max mode") for problems opus can't crack.
   Agents carry a default `model:` in their frontmatter; BuddyX overrides it per call. This
   keeps sub-agents off the top model by default and stretches your usage limits.
 - **Safety posture** — confirmation gates for destructive/outward-facing ops, least-privilege
@@ -115,7 +116,7 @@ needs it):
 - **delegation-protocol.md** — real sub-agent invocation, parallel vs sequential, recovery, degradation
 - **routing.md** — capability index, task→agent matching, tie-breaks, fallback ladder
 - **agent-spec.md** — the frontmatter contract, `agent create` procedure, quality bar
-- **model-tiers.md** — haiku / sonnet / opus per step, override precedence, escalation, per-harness support
+- **model-tiers.md** — haiku / sonnet / opus per step, opt-in fable, override precedence, escalation, per-harness support
 - **report-format.md** — the standard result block
 - **safety.md** — confirmation gates, least-privilege, secrets, faithful reporting
 - **workflows/** — per-command playbooks (bootstrap · create · refactor · review · analyze · test · docs)

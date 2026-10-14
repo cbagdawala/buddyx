@@ -29,7 +29,7 @@ Rules:
 - `model` is the agent's **default tier** — the cheapest that does its typical task well
   (`model-tiers.md`): `haiku` for scanners/lookups/test-runners, `sonnet` for builders,
   writers and the default reviewer, `opus` only for architecture, risky-refactor or
-  security work. Use tier aliases, never dated model IDs. On harnesses without model
+  security work — never `fable` (opt-in per call only). Use tier aliases, never dated model IDs. On harnesses without model
   support, omit the field.
 
 ## Body structure (recommended)

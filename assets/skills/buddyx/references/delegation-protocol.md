@@ -50,7 +50,8 @@ Do **not** dump BuddyX's whole conversation into the sub-agent. Give it the slic
 
 1. **Retry once** if the failure looks transient (tool error, timeout) — same tier.
    If the failure is a **reasoning** failure (wrong, incomplete, low-confidence output, or
-   rejected by the verify gate), retry once **one tier up** instead (`model-tiers.md`).
+   rejected by the verify gate), retry once **one tier up** instead (`model-tiers.md`) —
+   up to `opus`. Going to `fable` needs the user's go-ahead.
 2. **Fall back** to an alternate agent, or handle inline, if retry fails.
 3. **On multi-agent partial failure**, do not silently drop the branch: report which
    subtask failed, what completed, and offer options (retry / skip / hand to user).
