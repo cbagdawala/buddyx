@@ -9,7 +9,9 @@ no plan gate, no mutation, but still route and report.
    an architecture question).
 2. **Route** — pick the relevant analyzer/domain agent. For a broad sweep, fan out
    read-only agents by area (backend / frontend / data / tests) **in parallel** and merge.
-3. **Delegate read-only** — analyzers get `Read, Grep, Glob` only.
+3. **Delegate read-only** — analyzers get `Read, Grep, Glob` only. Fact-gathering sweeps
+   run on `haiku`; a design/architecture judgment gets `sonnet`, or `opus` if it's subtle
+   (`../model-tiers.md`).
 4. **Synthesize** — merge findings into one coherent picture; resolve contradictions
    between agents rather than pasting raw dumps.
 5. **Report** — standard block with `Verification: N/A — read-only`. Lead with the

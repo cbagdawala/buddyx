@@ -17,6 +17,8 @@ multi-agent, plan-gated, verified workflow.
    - Fan out **independent** pieces in parallel (e.g. backend skeleton, DB schema, test
      scaffolding).
    - Sequence **dependent** pieces (wiring depends on the pieces existing).
+   - Builders run on their default tier (`sonnet`); override to `opus` only for the piece
+     that needs real design (new data model, tricky concurrency, payments/auth flow).
 5. **Join** — reconcile overlapping edits; resolve any sub-agent failure via the recovery
    policy.
 6. **Verify** — run the review gate (`review.md`): route the diff to a reviewer/tester

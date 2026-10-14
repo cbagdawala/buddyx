@@ -10,6 +10,8 @@
 3. **Route** — to the `testing` agent (or the domain agent if none exists). The testing
    agent needs `Read, Write, Edit, Bash` (to run the suite).
 4. **Delegate** — for a large surface, split by module and parallelize test authoring.
+   Tiers: **writing** tests → `sonnet`; **just running** the existing suite and summarizing
+   → `haiku`; diagnosing a failure with an unclear cause → `opus` (`../model-tiers.md`).
 5. **Run & report results honestly** — execute the suite. If tests fail, the outcome is
    `partial`/`blocked` with the failing tests named and the actual output shown — never
    claim green when it's red.

@@ -12,7 +12,8 @@ This is **plan-gated**: BuddyX proposes the fleet and waits for approval before 
 
 ### 1. Scan (read-only, fanned out)
 Detect the stack from **manifests and structure first** — don't read every file. Delegate
-to read-only analyzers (parallel by area) when the repo is large.
+to read-only analyzers (parallel by area, on the **light** tier — `haiku`) when the repo is
+large. Scanning is fact gathering; it doesn't need a deep model.
 
 Signals to gather:
 - **Language / runtime** — `package.json`, `composer.json`, `pyproject.toml`/`requirements.txt`,
@@ -24,26 +25,31 @@ Signals to gather:
 - **Data** — migrations dir, ORM (Eloquent, Prisma, TypeORM, SQLAlchemy), DB from config.
 - **Tests** — Pest/PHPUnit, Vitest/Jest, Pytest, Playwright/Cypress.
 - **Ops** — Dockerfile/compose, CI config, deploy scripts, IaC.
-- **Existing agents** — read the agents dir; record names, descriptions, and which lack
-  frontmatter.
+- **Existing agents** — read the agents dir; record names, descriptions, `model:`, and
+  which lack frontmatter or a `model:` tier.
 
 ### 2. Propose (detection-driven, not a template)
 Map the detected signals to a **minimal, non-overlapping** fleet. Only propose an agent
 the project actually needs — no `primevue-ui` without PrimeVue, no `devops` without an
 ops surface. For each proposed agent, state: name, one-line scope, least-privilege `tools:`,
-and the signal that justifies it.
+right-sized `model:` tier (`../model-tiers.md`), and the signal that justifies it.
 
 Typical mappings (illustrative):
 
-| Detected | Proposed agent |
-|---|---|
-| Laravel / Django / Express backend | `backend-architect` |
-| Migrations + ORM | `db-migration` |
-| Vue / React frontend | `<framework>-frontend` |
-| PrimeVue / MUI / component lib | `<lib>-ui` |
-| Test framework present | `testing` |
-| Dockerfile / CI / deploy | `devops` |
-| Any codebase | `code-reviewer` (read-only, for the verify gate) |
+| Detected | Proposed agent | Default `model:` |
+|---|---|---|
+| Laravel / Django / Express backend | `backend-architect` | `sonnet` |
+| Migrations + ORM | `db-migration` | `sonnet` |
+| Vue / React frontend | `<framework>-frontend` | `sonnet` |
+| PrimeVue / MUI / component lib | `<lib>-ui` | `sonnet` |
+| Test framework present | `testing` | `sonnet` |
+| Dockerfile / CI / deploy | `devops` | `sonnet` |
+| Large repo / many modules | `codebase-explorer` (read-only lookups & scans) | `haiku` |
+| Any codebase | `code-reviewer` (read-only, for the verify gate) | `sonnet` |
+| Auth, payments, PII, or other sensitive surface | `security-reviewer` (read-only) | `opus` |
+
+Builders default to `sonnet`; BuddyX overrides to `opus` per call for design-heavy
+subtasks rather than baking the top tier into every agent.
 
 Always include a read-only **`code-reviewer`** so the verify gate has a home.
 
@@ -54,7 +60,9 @@ approve all · edit the list · skip specific agents.
 
 ### 4. Generate (reconcile, don't clobber)
 For each approved agent, follow `../agent-spec.md`:
-- **Exists with frontmatter** → skip (or update only if the user asked).
+- **Exists with frontmatter** → skip (or update only if the user asked). If it has **no
+  `model:`**, offer to add the tier from the table above — without one it inherits the
+  session's top model on every call.
 - **Exists without frontmatter** → offer to upgrade it to the contract; never silently
   overwrite.
 - **Missing** → create it, least-privilege `tools:`, routing-quality `description`,
@@ -64,7 +72,7 @@ Idempotent: re-running `bootstrap` adds only what's missing and re-offers upgrad
 
 ### 5. Report
 Standard block (`../report-format.md`): agents created / upgraded / skipped, plus a short
-fleet index (name → purpose). Refresh the session capability index so the new agents route
+fleet index (name → tier → purpose). Refresh the session capability index so the new agents route
 immediately.
 
 ## Guardrails

@@ -13,6 +13,8 @@
    changes, decompose and route per area.
 4. **Delegate** — sequence changes that share files; parallelize independent areas.
    Instruct each agent: **preserve behavior**, match existing conventions, no scope creep.
+   Tiers: local/mechanical refactors (rename, extract, move) → `sonnet`; cross-cutting or
+   behavior-sensitive ones → `opus`. The analyze-first sweep can run on `haiku`.
 5. **Verify (mandatory)** — the review gate is not optional for refactors:
    - Run the existing tests; they must still pass.
    - Route the diff to a reviewer for behavior-change detection.

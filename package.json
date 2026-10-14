@@ -1,6 +1,6 @@
 {
   "name": "buddyx",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "CLI to install the BuddyX skill — a master orchestrator that plans, routes to specialized sub-agents, fans out in parallel, verifies through a review gate, and reports — into AI coding assistants like Claude Code and opencode.",
   "type": "module",
   "bin": {

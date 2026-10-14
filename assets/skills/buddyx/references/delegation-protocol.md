@@ -34,6 +34,9 @@ Each sub-agent invocation must carry:
 - **Context** — relevant files/paths, conventions, and the parent task it serves.
 - **Constraints** — what not to touch, style/security rules, acceptance criteria.
 - **Return contract** — what to hand back (a diff summary, a file list, a verdict).
+- **Model** — the agent's frontmatter `model:` is the default. Pass `model` on the call
+  only to override it for this subtask (e.g. `opus` for a design-heavy piece, `haiku` for a
+  pure lookup). Pick per subtask, not per command — see `model-tiers.md`.
 
 Do **not** dump BuddyX's whole conversation into the sub-agent. Give it the slice it needs.
 
@@ -45,7 +48,9 @@ Do **not** dump BuddyX's whole conversation into the sub-agent. Give it the slic
 
 ## 5. Recovery policy (partial failure is normal)
 
-1. **Retry once** if the failure looks transient (tool error, timeout).
+1. **Retry once** if the failure looks transient (tool error, timeout) — same tier.
+   If the failure is a **reasoning** failure (wrong, incomplete, low-confidence output, or
+   rejected by the verify gate), retry once **one tier up** instead (`model-tiers.md`).
 2. **Fall back** to an alternate agent, or handle inline, if retry fails.
 3. **On multi-agent partial failure**, do not silently drop the branch: report which
    subtask failed, what completed, and offer options (retry / skip / hand to user).
@@ -66,3 +71,5 @@ When you can't spawn a sub-agent:
 - Running independent agents one-by-one.
 - Passing an agent no acceptance criteria, then trusting its output without a verify gate.
 - Letting a failed sub-agent vanish from the final report.
+- Spawning every sub-agent on the top model — or leaving `model:` unset so they all
+  inherit it. Right-size per subtask and escalate only on failure.

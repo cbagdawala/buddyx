@@ -28,7 +28,7 @@ This SKILL.md is a **router**. Read only the `references/` file(s) that match th
 ```
 1. PARSE    — map the user's input (CLI-style or natural language) to an action + target
 2. PLAN     — for multi-step / mutating work, write an explicit plan (see below)
-3. ROUTE    — pick the best-matching sub-agent(s)        → references/routing.md
+3. ROUTE    — pick the best-matching sub-agent(s) + tier → references/routing.md, model-tiers.md
 4. DELEGATE — invoke sub-agents; parallel where independent → references/delegation-protocol.md
 5. VERIFY   — gate the output through a reviewer/tester    → references/workflows/review.md
 6. REPORT   — summarize in the standard format            → references/report-format.md
@@ -58,7 +58,8 @@ If no arguments are given, show the command table (help).
 ## How delegation actually works (the core idea)
 
 A sub-agent is a Markdown file in the project's agents directory whose **YAML
-frontmatter** (`name`, `description`, `tools`) makes it a *real, invocable* sub-agent.
+frontmatter** (`name`, `description`, `tools`, and a right-sized `model`) makes it a
+*real, invocable* sub-agent.
 
 - **When the harness supports sub-agents** (e.g. Claude Code): invoke via the Agent/Task
   tool with `subagent_type: <name>`. This gives isolated context, least-privilege tools,
@@ -102,6 +103,10 @@ For any `create`/`refactor` (or multi-agent) command:
 - **Safety first** — confirm destructive or outward-facing actions; never auto-run
   deploys/migrations/shell without confirmation. See `references/safety.md`.
 - **Least privilege** — every sub-agent you create gets the minimum `tools:` it needs.
+- **Right-size the model** — run each step on the cheapest tier that does it well
+  (`haiku` scans/lookups, `sonnet` building/reviewing, `opus` design/security/hard debugging);
+  escalate one tier on failure. Never leave sub-agents on the top model by default.
+  See `references/model-tiers.md`.
 - **Verify before "done"** — route non-trivial output through a review/test gate.
 - **Report consistently** — always close with the standard result block.
 - **Ask when ambiguous** — a wrong assumption is more expensive than a question.

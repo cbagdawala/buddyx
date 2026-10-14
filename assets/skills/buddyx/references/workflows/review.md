@@ -7,7 +7,8 @@ mutating workflow runs before declaring done.
 
 After builder agents finish and their edits are joined:
 1. Route the **diff** (not the whole repo) to a read-only reviewer agent — or the
-   `code-reviewer`/`testing` agent if present.
+   `code-reviewer`/`testing` agent if present. Default tier: **standard** (`sonnet`);
+   escalate to `opus` for a wide or subtle diff (`../model-tiers.md`).
 2. The reviewer checks: correctness, convention adherence, security, and whether
    acceptance criteria are met.
 3. **Triage findings**: fix blocking issues (route back to the owning agent), report the
@@ -18,11 +19,13 @@ After builder agents finish and their edits are joined:
 For security-sensitive, data-mutating, or wide-blast-radius changes, spawn **2–3
 independent reviewers** with different lenses (correctness / security / does-it-actually-
 work) and require agreement before accepting. One reviewer's "looks fine" is not a gate.
+Tiers: correctness and does-it-work on `sonnet`; the **security lens always on `opus`**.
 
 ## As a standalone command
 
 1. Scope the target (a diff, a file, a module).
-2. Route to the reviewer agent(s); for a broad audit, fan out by dimension.
+2. Route to the reviewer agent(s); for a broad audit, fan out by dimension. Use `haiku`
+   only for mechanical sweeps (lint-style patterns, TODO/debug-leftover hunts).
 3. Return findings **ranked most-severe first**, each with: file:line, why it's a problem,
    and a concrete fix. Don't bury a real bug under style nits.
 

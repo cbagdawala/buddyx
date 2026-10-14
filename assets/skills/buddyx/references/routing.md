@@ -8,14 +8,15 @@ List the agents directory (see SKILL.md for the resolution order). For each agen
 read only its frontmatter and record:
 
 ```
-name · description · tools · has_frontmatter(bool)
+name · description · tools · model · has_frontmatter(bool)
 ```
 
 Cache this for the session. Don't re-read every file on every request. Refresh only if the
 user adds/edits agents or runs `agent list`.
 
-`agent list` = print this index: each agent's `name` + a one-line purpose from its
-`description`, and flag any without frontmatter as "role-doc only (inline)".
+`agent list` = print this index: each agent's `name`, its `model` tier, and a one-line
+purpose from its `description`. Flag any without frontmatter as "role-doc only (inline)",
+and any without `model:` as "inherits session model — suggest a tier".
 
 ## 2. Match the task to an agent
 
@@ -25,10 +26,14 @@ exactly this). Score on:
 - Boundary fit (the description doesn't exclude it).
 - Specificity (prefer the narrowest agent that fully covers the task).
 
+Once matched, pick the tier for this call: the agent's `model:` unless the subtask is
+clearly lighter or heavier than its usual work (`model-tiers.md`).
+
 ## 3. Tie-breaks
 
 - **Two agents overlap** → prefer the **more specific** one; if truly equal, prefer the
-  one whose `tools:` are sufficient but smaller (least privilege).
+  one whose `tools:` are sufficient but smaller (least privilege), then the one on the
+  cheaper `model:` tier.
 - **A task spans multiple agents** → don't force one agent; **decompose** and route each
   part (then parallelize per `delegation-protocol.md`).
 - **Ambiguous intent** → ask the user one clarifying question rather than guessing.

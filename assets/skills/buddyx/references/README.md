@@ -6,6 +6,7 @@ Loaded on demand by `SKILL.md`. Read only what the task needs.
 - `delegation-protocol.md` — how to invoke sub-agents; parallel vs sequential; recovery; degradation.
 - `routing.md` — build the capability index; match tasks to agents; tie-breaks; fallback ladder.
 - `agent-spec.md` — the frontmatter contract + `agent create` procedure + quality bar.
+- `model-tiers.md` — right-size the model per step (haiku / sonnet / opus), precedence, escalation.
 - `report-format.md` — the standard result block every command closes with.
 - `safety.md` — confirmation gates, least privilege, secrets, faithful reporting.
 
