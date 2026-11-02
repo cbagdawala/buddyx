@@ -3,6 +3,10 @@
 The contract every BuddyX sub-agent must satisfy to be a *real, invocable* sub-agent —
 and the template to use for `agent create`.
 
+> **opencode** uses a different frontmatter (`mode: subagent`, `permission:` instead of
+> `tools:`, no `name:`, `model:` only from the user's tier map). Use `opencode.md` for the
+> fields; the body structure, `agent create` procedure and quality bar below still apply.
+
 ## The frontmatter contract (required)
 
 A sub-agent is a Markdown file in the project's agents directory that **begins with YAML
@@ -60,7 +64,7 @@ others — narrow scopes make routing unambiguous.
    of creating a near-duplicate (duplicates poison routing).
 3. **Author the file** to the contract above — pick the **minimum** `tools:` set and the
    **cheapest adequate** `model:` tier (state the reason in one line to the user).
-4. **Write** it to the harness agents dir as `<name>.md`.
+4. **Write** it to the harness agents dir as `<name>.md` (opencode: `.opencode/agents/`).
 5. **Validate**: frontmatter present, `name` matches filename, `tools` least-privilege,
    `model` right-sized, description is routing-quality.
 6. **Register** it in the session capability index and confirm to the user with a

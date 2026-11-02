@@ -9,6 +9,7 @@ Loaded on demand by `SKILL.md`. Read only what the task needs.
 - `model-tiers.md` — right-size the model per step (haiku / sonnet / opus), precedence, escalation.
 - `report-format.md` — the standard result block every command closes with.
 - `safety.md` — confirmation gates, least privilege, secrets, faithful reporting.
+- `opencode.md` — opencode overrides: agent frontmatter, the `buddyx.json` tier map, escalation, fan-out.
 
 ## Workflows (per command)
 - `workflows/bootstrap.md` — scan the project → propose → approve → scaffold an agent fleet.

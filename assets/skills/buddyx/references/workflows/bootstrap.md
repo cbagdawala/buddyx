@@ -51,6 +51,14 @@ Typical mappings (illustrative):
 Builders default to `sonnet`; BuddyX overrides to `opus` per call for design-heavy
 subtasks rather than baking the top tier into every agent.
 
+**On opencode** the table's column is the agent's *tier* (haiku = light, sonnet =
+standard, opus = deep). Resolve it through `buddyx.json`: write the mapped
+`provider/model-id`, or no `model:` at all when the tier is `null` (the default). Use the
+opencode frontmatter (`mode: subagent`, `permission:`) and write to `.opencode/agents/`.
+Re-running bootstrap also re-syncs `model:` on BuddyX-created agents (those with a
+`# buddyx-tier:` comment) when the tier map has changed — list those edits in the
+approval step. See `../opencode.md`.
+
 Always include a read-only **`code-reviewer`** so the verify gate has a home.
 
 ### 3. Approve (mandatory gate)
@@ -62,7 +70,7 @@ approve all · edit the list · skip specific agents.
 For each approved agent, follow `../agent-spec.md`:
 - **Exists with frontmatter** → skip (or update only if the user asked). If it has **no
   `model:`**, offer to add the tier from the table above — without one it inherits the
-  session's top model on every call.
+  session's top model on every call. (Skip this offer on opencode in inherit mode.)
 - **Exists without frontmatter** → offer to upgrade it to the contract; never silently
   overwrite.
 - **Missing** → create it, least-privilege `tools:`, routing-quality `description`,

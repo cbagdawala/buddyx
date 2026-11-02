@@ -28,6 +28,11 @@ program
   .option('--ai <type>', aiHelp)
   .option('--global', 'install into your home dir (all projects) instead of the current project')
   .option('--force', 'overwrite an existing install')
+  .option(
+    '--tiers [map]',
+    'opencode only: map model tiers to provider/model-ids. Bare flag prompts; or pass e.g. "light=ollama/qwen3:8b,standard=ollama/qwen3-coder:30b,deep=inherit". Default: every tier inherits',
+  )
+  .option('--parallel', 'opencode only: let BuddyX fan independent sub-agents out concurrently (default: sequential)')
   .action((opts) => init(opts));
 
 program

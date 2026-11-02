@@ -25,7 +25,9 @@ Before invoking anything, decompose the command into subtasks and mark each edge
 > pieces together and the **verify gate** run **after** they join.
 
 Default to parallel for independent work — sequential-by-habit is the most common way an
-orchestrator wastes wall-clock.
+orchestrator wastes wall-clock. **Exception — opencode with `parallel: false`** (its
+default, for local model servers): run them one at a time in dependency order
+(`opencode.md`).
 
 ## 3. Delegate with a tight brief
 
@@ -51,7 +53,8 @@ Do **not** dump BuddyX's whole conversation into the sub-agent. Give it the slic
 1. **Retry once** if the failure looks transient (tool error, timeout) — same tier.
    If the failure is a **reasoning** failure (wrong, incomplete, low-confidence output, or
    rejected by the verify gate), retry once **one tier up** instead (`model-tiers.md`) —
-   up to `opus`. Going to `fable` needs the user's go-ahead.
+   up to `opus`. Going to `fable` needs the user's go-ahead. On opencode there's no
+   per-call model: follow the escalation rules in `opencode.md` instead.
 2. **Fall back** to an alternate agent, or handle inline, if retry fails.
 3. **On multi-agent partial failure**, do not silently drop the branch: report which
    subtask failed, what completed, and offer options (retry / skip / hand to user).

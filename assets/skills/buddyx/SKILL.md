@@ -77,9 +77,14 @@ Full mechanics — parallel vs sequential, joining results, degradation — live
 Check these in order; use the first directory that exists for the harness you're in:
 
 - `.claude/agents/` (project) or `~/.claude/agents/` (global) — Claude Code
-- `.opencode/agent/` · `.cursor/agents/` · `.windsurf/agents/` · `.codex/agents/`
+- `.opencode/agents/` (project, legacy `.opencode/agent/`) or `~/.config/opencode/agents/` (global) — opencode
+- `.cursor/agents/` · `.windsurf/agents/` · `.codex/agents/`
 - `.gemini/agents/` · `.agents/` (Antigravity)
 - `.factory/droids/` (project) or `~/.factory/droids/` (global) — Factory Droid
+
+**Running in opencode?** Read `references/opencode.md` first — its agent frontmatter,
+model tier map (`buddyx.json`, default: every sub-agent inherits your model), escalation
+and fan-out rules override the Claude Code defaults below.
 
 Build a lightweight capability index of these once per session (name + description from
 frontmatter) and route against it — see `references/routing.md`.
@@ -107,7 +112,8 @@ For any `create`/`refactor` (or multi-agent) command:
   (`haiku` scans/lookups, `sonnet` building/reviewing, `opus` design/security/hard debugging);
   escalate one tier on failure (up to `opus`; `fable` only when the user opts in). Never
   leave sub-agents on the top model by default.
-  See `references/model-tiers.md`.
+  See `references/model-tiers.md`. (opencode: follow the user's tier map in
+  `references/opencode.md` — inheriting one model is the default there.)
 - **Verify before "done"** — route non-trivial output through a review/test gate.
 - **Report consistently** — always close with the standard result block.
 - **Ask when ambiguous** — a wrong assumption is more expensive than a question.

@@ -49,7 +49,8 @@ the newest model in each tier, so agents never break on a retired ID.
    `backend-architect` normally runs `sonnet`, but gets `opus` to design a payment flow).
 3. **Agent default** — the `model:` field in the agent's frontmatter (`agent-spec.md`).
 4. **Inherit** — no field → session model. Treat a missing `model:` as a gap to fix, not
-   as a choice.
+   as a choice — **except on opencode in inherit mode**, where it's the intended setup
+   (`opencode.md`).
 
 ## Escalation (instead of starting high)
 
@@ -83,7 +84,7 @@ from.
 |---|---|
 | Claude Code | `model: haiku \| sonnet \| opus \| inherit` in frontmatter (`fable` only as a per-call override); `model` param on the Agent tool for per-call overrides |
 | Factory Droid | `model:` in the droid frontmatter (`inherit` or a model id the account offers) |
-| opencode | `model: <provider>/<model-id>` in agent frontmatter — map tiers to the configured provider's small / mid / large models |
+| opencode | Real `provider/model-id` only (no aliases), taken from the user's tier map `buddyx.json`; **default: no `model:`, every sub-agent inherits**. No per-call override. Full rules: `opencode.md` |
 | Others (Cursor, Windsurf, Codex, Gemini, Antigravity) | Omit `model:` unless the harness documents it; agents inherit |
 
 **Inline-role mode can't switch models** — the work runs on the session model. In that

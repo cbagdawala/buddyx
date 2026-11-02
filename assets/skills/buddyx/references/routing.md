@@ -16,7 +16,8 @@ user adds/edits agents or runs `agent list`.
 
 `agent list` = print this index: each agent's `name`, its `model` tier, and a one-line
 purpose from its `description`. Flag any without frontmatter as "role-doc only (inline)",
-and any without `model:` as "inherits session model — suggest a tier".
+and any without `model:` as "inherits session model — suggest a tier" (not on opencode
+in inherit mode — there it's correct; see `opencode.md`).
 
 ## 2. Match the task to an agent
 

@@ -52,6 +52,38 @@ your approval scaffolds them, so every later command has specialists to route to
 the in-assistant command; don't confuse it with the terminal `buddyx init`, which installs
 the skill.)
 
+## opencode: model tiers
+
+opencode has no `haiku`/`sonnet`/`opus` aliases and can't switch a sub-agent's model per
+call, and it's often pointed at a local server (e.g. Ollama) with one or two models. So
+on opencode BuddyX reads a tier map, `.opencode/buddyx.json` (global:
+`~/.config/opencode/buddyx.json`), written by `buddyx init --ai opencode`:
+
+```json
+{
+  "tiers": { "light": null, "standard": null, "deep": null },
+  "parallel": false
+}
+```
+
+- **Default — inherit.** Every tier is `null`: agents get no `model:` line and run on the
+  model of the agent that called them. No model swapping, no escalation ladder; a failed
+  step is retried once with a tighter brief, then handed back.
+- **Tiered.** Map any tier to a `provider/model-id` from your opencode config; unmapped
+  tiers still inherit. Escalation offers to raise an agent's default model (one line,
+  your approval) since opencode can't override it per call.
+- **`parallel: false`** runs sub-agents one at a time, which suits a single local GPU.
+  Set it to `true` (or pass `--parallel`) for cloud providers.
+
+```bash
+buddyx init --ai opencode --tiers        # prompts per tier, pre-filled from opencode.json
+buddyx init --ai opencode --tiers "light=ollama/qwen3:8b,standard=ollama/qwen3-coder:30b,deep=inherit"
+```
+
+Running `--tiers` again on an existing install only rewrites the map. `buddyx update`
+never touches it. Generated opencode agents use `mode: subagent` and `permission:`
+(least privilege) instead of Claude's `tools:` list.
+
 ## Supported assistants
 
 `claude` (Claude Code) · `opencode` · `cursor` · `windsurf` · `codex` · `gemini` ·
@@ -64,7 +96,7 @@ into `<assistant-dir>/skills/buddyx/`.
 
 BuddyX is an **orchestrator**, not a stack. It ships no sub-agents of its own — instead it
 **discovers the specialized agents already in your project** (`.claude/agents/`,
-`.opencode/agent/`, etc.), routes to the best match on their `description`, and creates a
+`.opencode/agents/`, etc.), routes to the best match on their `description`, and creates a
 new agent (to a frontmatter contract) when none fits.
 
 Every command runs the same loop:
@@ -119,6 +151,7 @@ needs it):
 - **model-tiers.md** — haiku / sonnet / opus per step, opt-in fable, override precedence, escalation, per-harness support
 - **report-format.md** — the standard result block
 - **safety.md** — confirmation gates, least-privilege, secrets, faithful reporting
+- **opencode.md** — opencode agent frontmatter, the `buddyx.json` tier map, escalation, fan-out
 - **workflows/** — per-command playbooks (bootstrap · create · refactor · review · analyze · test · docs)
 - **checklists/done-criteria.md** — acceptance criteria that define "done"
 
@@ -141,7 +174,7 @@ buddyx uninstall               # detect installs in the current project and conf
 
 | Command | Description |
 |---|---|
-| `buddyx init [--ai <type>] [--global] [--force]` | Install the skill |
+| `buddyx init [--ai <type>] [--global] [--force] [--tiers [map]] [--parallel]` | Install the skill; `--tiers` / `--parallel` set the opencode tier map |
 | `buddyx update [--ai <type>] [--global]` | Re-copy the bundled skill over an existing install |
 | `buddyx uninstall [--ai <type>] [--global]` | Remove the skill |
 | `buddyx versions` | Print the CLI version |
