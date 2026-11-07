@@ -179,6 +179,11 @@ buddyx uninstall               # detect installs in the current project and conf
 | `buddyx uninstall [--ai <type>] [--global]` | Remove the skill |
 | `buddyx versions` | Print the CLI version |
 
+## Support
+
+If BuddyX saves you time, you can support its development with a donation:
+**[paypal.me/cbagdawala](https://paypal.me/cbagdawala)** ☕
+
 ## License
 
 MIT © Chintan Bagdawala
